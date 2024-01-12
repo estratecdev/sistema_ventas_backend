@@ -33,7 +33,7 @@ jobs:
         ssh-keyscan -H ec2-54-200-96-222.us-west-2.compute.amazonaws.com >> ~/.ssh/known_hosts
 
         # Copiar archivos a la instancia EC2
-        scp -i ssh_key.pem -r ./ ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com:/
+        scp -i ssh_key.pem -r ./ ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com:/src
 
         # Conectar y ejecutar comandos en la instancia EC2
         ssh -i ssh_key.pem ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com 'cd /src && npm install && pm2 reload ecosystem.config.js --env production'
