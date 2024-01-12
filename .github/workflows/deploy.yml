@@ -36,8 +36,7 @@ jobs:
         scp -i ssh_key.pem -r ./ ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com:/
 
         # Conectar y ejecutar comandos en la instancia EC2
-        
-        ssh -i ssh_key.pem ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com 'cd / && npm install && pm2 restart your-app'
+        ssh -i ssh_key.pem ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com 'cd / && npm install && pm2 reload ecosystem.config.js --env production'
 
         # Limpiar
         rm ssh_key.pem
