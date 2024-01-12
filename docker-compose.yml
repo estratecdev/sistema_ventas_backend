@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_ROOT_USER: /run/secrets/mysql_root_user
+      MYSQL_DATABASE: estratec
+      MYSQL_USER_FILE: /run/secrets/mysql_user
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    secrets:
+      - mysql_root_user
+      - mysql_root_password
+      - mysql_user
+      - mysql_password
+    ports:
+      - '3306:3306'
+    networks:
+      - estratec-app
+    volumes:
+      - '$PWD/mysql/mysql-entrypoint/:/docker-entrypoint-initdb.d/'
+
+networks:
+  estratec-app:
+    driver: bridge
+
+volumes:
+  estratec-data:
+    driver: local
+
+secrets:
+  mysql_root_user:
+    file: ./mysql/secrets/mysql_root_user
+  mysql_root_password:
+    file: ./mysql/secrets/mysql_root_password
+  mysql_user:
+    file: ./mysql/secrets/mysql_user
+  mysql_password:
+    file: ./mysql/secrets/mysql_password

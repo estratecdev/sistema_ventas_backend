@@ -1,0 +1,35 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate .env on EC2
+      run: echo "PORT_SERVER=3000\nSECRET=sist3m@v3nt@asjjjy\nDB_NAME=estratec\nDB_USER=root\nDB_PASSWORD=test1234\nDB_HOST=127.0.0.1\n" > .env && scp .env your-ec2-instance-ip:/
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh-keyscan -H your-ec2-instance-ip >> ~/.ssh/known_hosts
+        scp -r ./ your-ec2-instance-ip:/
+        ssh your-ec2-instance-ip 'cd / && npm install && pm2 restart your-app'
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

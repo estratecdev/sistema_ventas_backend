@@ -1,7 +1,11 @@
 const app = require('./app');
 
-async function main(){
-    await app.listen(process.env.PORT_SERVER||4000);
-    console.log(`Server on port ${process.env.PORT_SERVER||4000}`);
+const PORT = process.env.PORT_SERVER || 4000;
+
+async function main() {
+    await app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is running on http://127.0.0.1:${PORT}`);
+    });
 }
+
 main();
