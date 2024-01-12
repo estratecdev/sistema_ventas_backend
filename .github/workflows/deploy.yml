@@ -26,6 +26,9 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
         chmod 600 ssh_key.pem
 
+        # Crear directorio ~/.ssh si no existe
+        mkdir -p ~/.ssh
+
         # Agregar la clave del host al archivo known_hosts
         ssh-keyscan -H 54.200.96.222 >> ~/.ssh/known_hosts
 
@@ -33,10 +36,9 @@ jobs:
         scp -i ssh_key.pem -r ./ ec2-user@54.200.96.222:/
 
         # Conectar y ejecutar comandos en la instancia EC2
-        ssh -i ssh_key.pem ec2-user@54.200.96.222 'cd / && npm install && pm2 restart your-app'
+        ssh -i ssh_key.pem ec2-user@54.200.96.222 'cd /ruta/a/tu/app && npm install && pm2 restart your-app'
 
         # Limpiar
         rm ssh_key.pem
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
