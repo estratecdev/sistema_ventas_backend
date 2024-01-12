@@ -21,16 +21,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Remove old entry from known_hosts
-      run: |
-        mkdir -p ~/.ssh
-        touch ~/.ssh/known_hosts
-        ssh-keygen -R 54.200.96.222
 
     - name: Deploy to EC2
       run: |
-        ssh-keyscan -H 54.200.96.222 >> ~/.ssh/known_hosts
-        scp -r ./ ec2-user@54.200.96.222:/
         ssh -i <(echo "${{ secrets.SSH_PRIVATE_KEY }}") ec2-user@54.200.96.222 'cd / && npm install && pm2 restart your-app'
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
