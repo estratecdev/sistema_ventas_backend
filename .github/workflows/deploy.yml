@@ -37,7 +37,7 @@ jobs:
 
         # Conectar y ejecutar comandos en la instancia EC2
         
-        ssh -i ssh_key.pem ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com 'cd /ruta/a/tu/app && npm install && pm2 restart your-app'
+        ssh -i ssh_key.pem ubuntu@ec2-54-200-96-222.us-west-2.compute.amazonaws.com 'cd / && npm install && pm2 restart your-app'
 
         # Limpiar
         rm ssh_key.pem
