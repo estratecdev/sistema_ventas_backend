@@ -21,9 +21,12 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-
     - name: Deploy to EC2
       run: |
-        ssh -i <(echo "${{ secrets.SSH_PRIVATE_KEY }}") ec2-user@54.200.96.222 'cd / && npm install && pm2 restart your-app'
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
+        chmod 600 ssh_key.pem
+        scp -i ssh_key.pem -r ./ ec2-user@54.200.96.222:/
+        ssh -i ssh_key.pem ec2-user@54.200.96.222 'cd / && npm install && pm2 restart your-app'
+        rm ssh_key.pem
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
